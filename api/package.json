@@ -1,0 +1,32 @@
+{
+  "name": "employee-management-api",
+  "version": "1.0.0",
+  "description": "社員管理システムのバックエンドAPI",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage"
+  },
+  "keywords": [
+    "fastify",
+    "typescript",
+    "mysql",
+    "employee-management"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  },
+  "dependencies": {
+    "fastify": "^4.0.0",
+    "mysql2": "^3.0.0",
+    "@fastify/cors": "^9.0.0"
+  }
+}
