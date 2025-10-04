@@ -7,14 +7,14 @@ interface BuildOptions {
 
 // アプリケーションの設定を関数として切り出す
 // テスト時は logger: false でログ出力を抑制できる
-export const build = (opts: BuildOptions = {}) => {
+export const build = async (opts: BuildOptions = {}) => {
   const fastify = Fastify({
     logger: opts.logger !== false, // テスト時はfalseを指定可能
     ...opts,
   });
 
   // CORS設定 - 本番とテストで同じ設定を使用
-  fastify.register(import("@fastify/cors"), {
+  await fastify.register(import("@fastify/cors"), {
     origin: ["http://localhost:5173"],
   });
 

@@ -5,7 +5,7 @@ import type { FastifyInstance } from "fastify";
 let app: FastifyInstance;
 
 beforeAll(async () => {
-  app = build({ logger: false });
+  app = await build({ logger: false });
   await app.ready();
 });
 
