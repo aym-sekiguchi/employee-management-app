@@ -23,6 +23,7 @@ test("api: ヘルスチェックエンドポイントが正常に動作する", 
   expect(response.json()).toEqual({
     status: "ok",
     message: "API server is running",
+    database: "connected",
   });
 });
 
