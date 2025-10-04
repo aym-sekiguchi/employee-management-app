@@ -1,13 +1,9 @@
 import Fastify from "fastify";
-
-interface BuildOptions {
-  logger?: boolean;
-  [key: string]: unknown;
-}
+import type { FastifyServerOptions } from "fastify";
 
 // アプリケーションの設定を関数として切り出す
 // テスト時は logger: false でログ出力を抑制できる
-export const build = async (opts: BuildOptions = {}) => {
+export const build = async (opts: FastifyServerOptions = {}) => {
   const fastify = Fastify({
     logger: opts.logger !== false, // テスト時はfalseを指定可能
     ...opts,
