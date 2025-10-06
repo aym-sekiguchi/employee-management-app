@@ -72,7 +72,7 @@ const employeesRoutes: FastifyPluginAsync = async (fastify) => {
           request.body.email,
         ]);
 
-        const count = (existingRows as any[])[0].count;
+        const count = (existingRows as import("mysql2/promise").RowDataPacket[])[0].count;
         if (count > 0) {
           reply.status(409).send({
             error: "このメールアドレスは既に使用されています",
@@ -110,7 +110,7 @@ const employeesRoutes: FastifyPluginAsync = async (fastify) => {
             [request.body.email, id]
           );
 
-          const count = (existingRows as any[])[0].count;
+          const count = (existingRows as { count: number }[])[0].count;
           if (count > 0) {
             reply.status(409).send({
               error: "このメールアドレスは既に使用されています",

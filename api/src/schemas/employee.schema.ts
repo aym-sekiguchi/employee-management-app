@@ -58,7 +58,21 @@ export const idParamSchema = {
 } as const;
 
 // エラーメッセージ用のヘルパー関数
-export const getValidationErrorMessage = (error: any): { message: string; field: string } => {
+interface ValidationError {
+  keyword: string;
+  instancePath?: string;
+  params?: {
+    missingProperty?: string;
+    limit?: number;
+  };
+}
+
+interface ValidationErrorMessage {
+  message: string;
+  field: string;
+}
+
+export const getValidationErrorMessage = (error: ValidationError): ValidationErrorMessage => {
   const field = error.instancePath?.replace("/", "") || error.params?.missingProperty || "不明なフィールド";
 
   let message = "入力値が正しくありません";
@@ -77,7 +91,7 @@ export const getValidationErrorMessage = (error: any): { message: string; field:
       }
       break;
     case "maxLength":
-      message = `${field}は${error.params.limit}文字以内で入力してください`;
+      message = `${field}は${error.params?.limit}文字以内で入力してください`;
       break;
     case "minLength":
       message = `${field}は必須項目です`;
