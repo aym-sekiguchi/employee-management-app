@@ -4,6 +4,9 @@ interface Employee {
   id: number;
   name: string;
   email: string;
+  department?: string;
+  created_at: string;
+  updated_at: string;
 }
 
 function App() {
@@ -18,7 +21,7 @@ function App() {
     try {
       const response = await fetch("http://localhost:3000/employees");
       const data = await response.json();
-      setEmployees(data.data);
+      setEmployees(data);
     } catch (error) {
       console.error("Failed to fetch employees:", error);
     } finally {
