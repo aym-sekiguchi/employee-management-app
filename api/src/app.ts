@@ -12,6 +12,9 @@ export const build = async (opts: FastifyServerOptions = {}) => {
     origin: ["http://localhost:5173"],
   });
 
+  // EmployeeルートのAPIエンドポイントを登録
+  await fastify.register(import("./routes/employees.js"));
+
   // ヘルスチェックエンドポイント（DB接続確認付き）
   fastify.get("/health", async (request, reply) => {
     const dbConnected = await testConnection();
@@ -20,16 +23,6 @@ export const build = async (opts: FastifyServerOptions = {}) => {
       status: "ok",
       message: "API server is running",
       database: dbConnected ? "connected" : "disconnected",
-    };
-  });
-
-  // 従業員一覧取得（仮実装）
-  fastify.get("/employees", async (request, reply) => {
-    return {
-      data: [
-        { id: 1, name: "田中太郎", email: "tanaka@example.com" },
-        { id: 2, name: "佐藤花子", email: "sato@example.com" },
-      ],
     };
   });
 
