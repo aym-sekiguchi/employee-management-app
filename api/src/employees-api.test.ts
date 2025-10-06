@@ -155,6 +155,33 @@ describe("Employee API Endpoints", () => {
 
     expect(response.statusCode).toBe(400);
     const error = JSON.parse(response.payload);
-    expect(error.error).toBe("無効なIDです");
+    expect(error.error).toBe("有効なIDを指定してください");
+  });
+
+  test("POST /employees - 必須項目不足はエラー", async () => {
+    const response = await app.inject({
+      method: "POST",
+      url: "/employees",
+      payload: { name: "テスト太郎" }, // emailが不足
+    });
+
+    expect(response.statusCode).toBe(400);
+    const error = JSON.parse(response.payload);
+    expect(error.field).toBe("email");
+  });
+
+  test("POST /employees - 無効なメールアドレスはエラー", async () => {
+    const response = await app.inject({
+      method: "POST",
+      url: "/employees",
+      payload: {
+        name: "テスト太郎",
+        email: "invalid-email", // 無効な形式
+      },
+    });
+
+    expect(response.statusCode).toBe(400);
+    const error = JSON.parse(response.payload);
+    expect(error.error).toBe("有効なメールアドレスを入力してください");
   });
 });
