@@ -2,9 +2,10 @@ import { useEffect } from "react";
 import { EmployeeCreateForm } from "./components/EmployeeCreateForm";
 import { useEmployeeStore } from "./stores/employeeStore";
 import { EmployeeList } from "./components/EmployeeList";
+import { EmployeeEditForm } from "./components/EmployeeEditForm";
 
 function App() {
-  const { loading, error, showForm, setShowForm, fetchEmployees } = useEmployeeStore();
+  const { loading, error, showForm, setShowForm, fetchEmployees, editingEmployee } = useEmployeeStore();
 
   useEffect(() => {
     fetchEmployees();
@@ -63,6 +64,7 @@ function App() {
         </div>
       </header>
       {showForm && <EmployeeCreateForm />}
+      {editingEmployee && <EmployeeEditForm />}
 
       {/* メインコンテンツ */}
       <main className="relative max-w-7xl mx-auto px-6 py-10">

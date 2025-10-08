@@ -1,7 +1,7 @@
 import { useEmployeeStore } from "../stores/employeeStore";
 
 export const EmployeeList = () => {
-  const { employees } = useEmployeeStore();
+  const { employees, setEditingEmployee } = useEmployeeStore();
 
   if (employees.length === 0) {
     return (
@@ -47,7 +47,10 @@ export const EmployeeList = () => {
 
           {/* アクションボタン */}
           <div className="flex space-x-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
-            <button className="flex-1 liquid-glass px-4 py-2.5 text-sm font-semibold text-blue-600/80 rounded-xl hover:scale-105 transition-all duration-200">
+            <button
+              className="flex-1 liquid-glass px-4 py-2.5 text-sm font-semibold text-blue-600/80 rounded-xl hover:scale-105 transition-all duration-200"
+              onClick={() => setEditingEmployee(employee)}
+            >
               編集
             </button>
             <button className="liquid-glass px-4 py-2.5 text-sm font-semibold text-slate-600/80 rounded-xl hover:scale-105 transition-all duration-200">

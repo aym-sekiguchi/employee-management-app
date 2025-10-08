@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { UpdateEmployeeFormData } from "../utils/employeeValidation";
 
 interface Employee {
   id: number;
@@ -21,16 +22,19 @@ interface EmployeeStore {
   loading: boolean;
   error: string | null;
   showForm: boolean;
+  editingEmployee: Employee | null;
 
   // アクション
   setEmployees: (employees: Employee[]) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   setShowForm: (show: boolean) => void;
+  setEditingEmployee: (employee: Employee | null) => void;
 
   // 非同期アクション
   fetchEmployees: () => Promise<void>;
   createEmployee: (data: EmployeeFormData) => Promise<void>;
+  updateEmployee: (id: number, data: UpdateEmployeeFormData) => Promise<void>;
 }
 
 export const useEmployeeStore = create<EmployeeStore>((set, get) => ({
@@ -39,12 +43,14 @@ export const useEmployeeStore = create<EmployeeStore>((set, get) => ({
   loading: false,
   error: null,
   showForm: false,
+  editingEmployee: null,
 
   // 基本アクション
   setEmployees: (employees) => set({ employees }),
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
   setShowForm: (showForm) => set({ showForm }),
+  setEditingEmployee: (editingEmployee) => set({ editingEmployee }),
 
   // 従業員取得
   fetchEmployees: async () => {
@@ -85,6 +91,33 @@ export const useEmployeeStore = create<EmployeeStore>((set, get) => ({
     } catch (error) {
       console.error("従業員の作成に失敗しました:", error);
       throw error; // フォーム側でハンドリング
+    }
+  },
+
+  // 従業員更新
+  updateEmployee: async (id, data) => {
+    try {
+      const response = await fetch(`http://localhost:3000/employees/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "更新に失敗しました");
+      }
+
+      const updatedEmployee = await response.json();
+
+      // ストア内の従業員リストを更新
+      set((state) => ({
+        employees: state.employees.map((emp) => (emp.id === id ? updatedEmployee : emp)),
+        editingEmployee: null, // 編集状態をクリア
+      }));
+    } catch (error) {
+      console.error("従業員の更新に失敗しました:", error);
+      throw error;
     }
   },
 }));
