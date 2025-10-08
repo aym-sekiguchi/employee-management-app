@@ -1,10 +1,10 @@
-import { CreateEmployeeFormData, ValidationErrors } from "../utils/employeeValidation";
+import { UpdateEmployeeFormData, ValidationErrors } from "../utils/employeeValidation";
 
 interface EmployeeFormFieldsProps {
-  formData: CreateEmployeeFormData;
+  formData: UpdateEmployeeFormData;
   errors: ValidationErrors;
   isSubmitting: boolean;
-  onChange: (field: keyof CreateEmployeeFormData, value: string) => void;
+  onChange: (field: keyof UpdateEmployeeFormData, value: string) => void;
 }
 
 export const EmployeeFormFields = ({ formData, errors, isSubmitting, onChange }: EmployeeFormFieldsProps) => {
