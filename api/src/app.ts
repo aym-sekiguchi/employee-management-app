@@ -10,6 +10,7 @@ export const build = async (opts: FastifyServerOptions = {}) => {
 
   await fastify.register(import("@fastify/cors"), {
     origin: ["http://localhost:5173"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   });
 
   // EmployeeルートのAPIエンドポイントを登録
