@@ -1,7 +1,15 @@
+import { useState } from "react";
 import { useEmployeeStore } from "../stores/employeeStore";
+import { EmployeeDeleteDialog } from "./EmployeeDeleteDialog";
 
 export const EmployeeList = () => {
   const { employees, setEditingEmployee } = useEmployeeStore();
+  const [deletingEmployee, setDeletingEmployee] = useState<{
+    id: number;
+    name: string;
+    email: string;
+    department?: string;
+  } | null>(null);
 
   if (employees.length === 0) {
     return (
@@ -26,39 +34,52 @@ export const EmployeeList = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-      {employees.map((employee) => (
-        <div
-          key={employee.id}
-          className="group liquid-card rounded-3xl p-7 transition-all duration-300 hover:scale-[1.02]"
-        >
-          {/* アバター */}
-          <div className="flex items-center space-x-4 mb-6">
-            <div className="w-14 h-14 bg-gradient-to-br from-blue-400/80 to-purple-500/80 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg">
-              {employee.name.charAt(0)}
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {employees.map((employee) => (
+          <div
+            key={employee.id}
+            className="group liquid-card rounded-3xl p-7 transition-all duration-300 hover:scale-[1.02]"
+          >
+            {/* アバター */}
+            <div className="flex items-center space-x-4 mb-6">
+              <div className="w-14 h-14 bg-gradient-to-br from-blue-400/80 to-purple-500/80 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                {employee.name.charAt(0)}
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-bold text-slate-800/90 truncate group-hover:text-blue-600/80 transition-colors duration-300">
+                  {employee.name}
+                </h3>
+                <p className="text-sm text-slate-600/70 truncate">{employee.email}</p>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="text-lg font-bold text-slate-800/90 truncate group-hover:text-blue-600/80 transition-colors duration-300">
-                {employee.name}
-              </h3>
-              <p className="text-sm text-slate-600/70 truncate">{employee.email}</p>
-            </div>
-          </div>
 
-          {/* アクションボタン */}
-          <div className="flex space-x-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
-            <button
-              className="flex-1 liquid-glass px-4 py-2.5 text-sm font-semibold text-blue-600/80 rounded-xl hover:scale-105 transition-all duration-200"
-              onClick={() => setEditingEmployee(employee)}
-            >
-              編集
-            </button>
-            <button className="liquid-glass px-4 py-2.5 text-sm font-semibold text-slate-600/80 rounded-xl hover:scale-105 transition-all duration-200">
-              詳細
-            </button>
+            {/* アクションボタン */}
+            <div className="flex space-x-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+              <button
+                className="flex-1 liquid-glass px-4 py-2.5 text-sm font-semibold text-blue-600/80 rounded-xl hover:scale-105 transition-all duration-200"
+                onClick={() => setEditingEmployee(employee)}
+              >
+                編集
+              </button>
+              <button className="liquid-glass px-4 py-2.5 text-sm font-semibold text-slate-600/80 rounded-xl hover:scale-105 transition-all duration-200">
+                詳細
+              </button>
+              <button
+                className="liquid-glass px-4 py-2.5 text-sm font-semibold text-red-600/80 rounded-xl hover:scale-105 transition-all duration-200"
+                onClick={() => setDeletingEmployee(employee)}
+              >
+                削除
+              </button>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+
+      {/* 削除確認ダイアログ */}
+      {deletingEmployee && (
+        <EmployeeDeleteDialog employee={deletingEmployee} onCancel={() => setDeletingEmployee(null)} />
+      )}
+    </>
   );
 };
