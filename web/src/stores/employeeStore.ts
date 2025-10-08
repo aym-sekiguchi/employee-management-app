@@ -35,6 +35,7 @@ interface EmployeeStore {
   fetchEmployees: () => Promise<void>;
   createEmployee: (data: EmployeeFormData) => Promise<void>;
   updateEmployee: (id: number, data: UpdateEmployeeFormData) => Promise<void>;
+  deleteEmployee: (id: number) => Promise<void>;
 }
 
 export const useEmployeeStore = create<EmployeeStore>((set, get) => ({
@@ -117,6 +118,27 @@ export const useEmployeeStore = create<EmployeeStore>((set, get) => ({
       }));
     } catch (error) {
       console.error("従業員の更新に失敗しました:", error);
+      throw error;
+    }
+  },
+
+  // 従業員削除
+  deleteEmployee: async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3000/employees/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("削除に失敗しました");
+      }
+
+      // ストア内の従業員リストから削除
+      set((state) => ({
+        employees: state.employees.filter((emp) => emp.id !== id),
+      }));
+    } catch (error) {
+      console.error("従業員の削除に失敗しました:", error);
       throw error;
     }
   },
