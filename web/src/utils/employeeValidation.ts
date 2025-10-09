@@ -13,49 +13,72 @@ export interface ValidationErrors {
   [key: string]: string;
 }
 
+// バリデーションヘルパー関数
+const validateName = (name: string): string | null => {
+  if (!name.trim()) {
+    return "名前は必須です";
+  }
+  if (name.length > 100) {
+    return "名前は100文字以内で入力してください";
+  }
+  return null;
+};
+
+const validateEmail = (email: string): string | null => {
+  if (!email.trim()) {
+    return "メールアドレスは必須です";
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return "有効なメールアドレスを入力してください";
+  }
+  if (email.length > 255) {
+    return "メールアドレスは255文字以内で入力してください";
+  }
+  return null;
+};
+
+const validateDepartment = (department: string): string | null => {
+  if (department.length > 100) {
+    return "部署名は100文字以内で入力してください";
+  }
+  return null;
+};
+
 // 新規作成用バリデーション
 export const validateCreateEmployeeForm = (formData: CreateEmployeeFormData): ValidationErrors => {
   const errors: ValidationErrors = {};
 
-  if (!formData.name.trim()) {
-    errors.name = "名前は必須です";
-  } else if (formData.name.length > 100) {
-    errors.name = "名前は100文字以内で入力してください";
-  }
+  const nameError = validateName(formData.name);
+  if (nameError) errors.name = nameError;
 
-  if (!formData.email.trim()) {
-    errors.email = "メールアドレスは必須です";
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-    errors.email = "有効なメールアドレスを入力してください";
-  } else if (formData.email.length > 255) {
-    errors.email = "メールアドレスは255文字以内で入力してください";
-  }
+  const emailError = validateEmail(formData.email);
+  if (emailError) errors.email = emailError;
 
-  if (formData.department && formData.department.length > 100) {
-    errors.department = "部署名は100文字以内で入力してください";
+  if (formData.department) {
+    const departmentError = validateDepartment(formData.department);
+    if (departmentError) errors.department = departmentError;
   }
 
   return errors;
 };
 
-// 更新用バリデーション（将来実装）
+// 更新用バリデーション
 export const validateUpdateEmployeeForm = (formData: UpdateEmployeeFormData): ValidationErrors => {
   const errors: ValidationErrors = {};
 
-  if (formData.name && formData.name.length > 100) {
-    errors.name = "名前は100文字以内で入力してください";
+  if (formData.name !== undefined) {
+    const nameError = validateName(formData.name);
+    if (nameError) errors.name = nameError;
   }
 
-  if (formData.email) {
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      errors.email = "有効なメールアドレスを入力してください";
-    } else if (formData.email.length > 255) {
-      errors.email = "メールアドレスは255文字以内で入力してください";
-    }
+  if (formData.email !== undefined) {
+    const emailError = validateEmail(formData.email);
+    if (emailError) errors.email = emailError;
   }
 
-  if (formData.department && formData.department.length > 100) {
-    errors.department = "部署名は100文字以内で入力してください";
+  if (formData.department !== undefined) {
+    const departmentError = validateDepartment(formData.department);
+    if (departmentError) errors.department = departmentError;
   }
 
   return errors;
