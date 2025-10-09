@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { UpdateEmployeeFormData } from "../utils/employeeValidation";
 
-interface Employee {
+export interface Employee {
   id: number;
   name: string;
   email: string;
@@ -23,6 +23,7 @@ interface EmployeeStore {
   error: string | null;
   showForm: boolean;
   editingEmployee: Employee | null;
+  deletingEmployee: Employee | null;
 
   // アクション
   setEmployees: (employees: Employee[]) => void;
@@ -30,6 +31,7 @@ interface EmployeeStore {
   setError: (error: string | null) => void;
   setShowForm: (show: boolean) => void;
   setEditingEmployee: (employee: Employee | null) => void;
+  setDeletingEmployee: (employee: Employee | null) => void;
 
   // 非同期アクション
   fetchEmployees: () => Promise<void>;
@@ -45,6 +47,7 @@ export const useEmployeeStore = create<EmployeeStore>((set, get) => ({
   error: null,
   showForm: false,
   editingEmployee: null,
+  deletingEmployee: null,
 
   // 基本アクション
   setEmployees: (employees) => set({ employees }),
@@ -52,6 +55,7 @@ export const useEmployeeStore = create<EmployeeStore>((set, get) => ({
   setError: (error) => set({ error }),
   setShowForm: (showForm) => set({ showForm }),
   setEditingEmployee: (editingEmployee) => set({ editingEmployee }),
+  setDeletingEmployee: (deletingEmployee) => set({ deletingEmployee }),
 
   // 従業員取得
   fetchEmployees: async () => {
