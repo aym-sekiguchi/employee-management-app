@@ -19,7 +19,7 @@ export const EmployeeFormFields = ({ formData, errors, isSubmitting, onChange }:
           id="name"
           data-testid="name"
           type="text"
-          value={formData.name}
+          value={formData.name || ""}
           onChange={(e) => onChange("name", e.target.value)}
           className={`w-full liquid-input py-4 px-5 rounded-2xl text-slate-800/90 placeholder:text-slate-500/60 ${
             errors.name ? "error" : ""
@@ -52,7 +52,7 @@ export const EmployeeFormFields = ({ formData, errors, isSubmitting, onChange }:
           id="email"
           data-testid="email"
           type="email"
-          value={formData.email}
+          value={formData.email || ""}
           onChange={(e) => onChange("email", e.target.value)}
           className={`w-full liquid-input py-4 px-5 rounded-2xl text-slate-800/90 placeholder:text-slate-500/60 ${
             errors.email ? "error" : ""
@@ -85,7 +85,7 @@ export const EmployeeFormFields = ({ formData, errors, isSubmitting, onChange }:
           id="department"
           data-testid="department"
           type="text"
-          value={formData.department}
+          value={formData.department || ""}
           onChange={(e) => onChange("department", e.target.value)}
           className={`w-full liquid-input py-4 px-5 rounded-2xl text-slate-800/90 placeholder:text-slate-500/60 ${
             errors.department ? "error" : ""
