@@ -16,25 +16,25 @@ describe("EmployeeDeleteDialog", () => {
     error: null,
     showForm: false,
     editingEmployee: null,
+    deletingEmployee: {
+      id: 1,
+      name: "田中太郎",
+      email: "tanaka@example.com",
+      department: "営業部",
+      created_at: "2025-10-06 00:04:35",
+      updated_at: "2025-10-06 00:04:35",
+    },
     setEmployees: vi.fn(),
     setLoading: vi.fn(),
     setError: vi.fn(),
     setShowForm: vi.fn(),
     setEditingEmployee: vi.fn(),
+    setDeletingEmployee: vi.fn(),
     fetchEmployees: vi.fn(),
     createEmployee: vi.fn(),
     updateEmployee: vi.fn(),
     deleteEmployee: vi.fn().mockResolvedValue(undefined),
   };
-
-  const mockEmployee = {
-    id: 1,
-    name: "田中太郎",
-    email: "tanaka@example.com",
-    department: "営業部",
-  };
-
-  const mockOnCancel = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -42,7 +42,7 @@ describe("EmployeeDeleteDialog", () => {
   });
 
   it("削除確認ダイアログが正しく表示される", () => {
-    render(<EmployeeDeleteDialog employee={mockEmployee} onCancel={mockOnCancel} />);
+    render(<EmployeeDeleteDialog />);
 
     expect(screen.getByText("従業員を削除")).toBeTruthy();
     expect(screen.getByText("以下の従業員を削除してもよろしいですか？")).toBeTruthy();
@@ -53,30 +53,39 @@ describe("EmployeeDeleteDialog", () => {
   });
 
   it("キャンセルボタンでダイアログが閉じる", () => {
-    render(<EmployeeDeleteDialog employee={mockEmployee} onCancel={mockOnCancel} />);
+    const mockSetDeletingEmployee = vi.fn();
+
+    mockUseEmployeeStore.mockReturnValue({
+      ...defaultMockStore,
+      setDeletingEmployee: mockSetDeletingEmployee,
+    });
+
+    render(<EmployeeDeleteDialog />);
 
     const cancelButton = screen.getByText("キャンセル");
     fireEvent.click(cancelButton);
 
-    expect(mockOnCancel).toHaveBeenCalledTimes(1);
+    expect(mockSetDeletingEmployee).toHaveBeenCalledWith(null);
   });
 
   it("削除ボタンで削除処理が実行される", async () => {
     const mockDeleteEmployee = vi.fn().mockResolvedValue(undefined);
+    const mockSetDeletingEmployee = vi.fn();
 
     mockUseEmployeeStore.mockReturnValue({
       ...defaultMockStore,
       deleteEmployee: mockDeleteEmployee,
+      setDeletingEmployee: mockSetDeletingEmployee,
     });
 
-    render(<EmployeeDeleteDialog employee={mockEmployee} onCancel={mockOnCancel} />);
+    render(<EmployeeDeleteDialog />);
 
     const deleteButton = screen.getByText("削除");
     fireEvent.click(deleteButton);
 
     await waitFor(() => {
       expect(mockDeleteEmployee).toHaveBeenCalledWith(1);
-      expect(mockOnCancel).toHaveBeenCalledTimes(1);
+      expect(mockSetDeletingEmployee).toHaveBeenCalledWith(null);
     });
   });
 
@@ -87,13 +96,15 @@ describe("EmployeeDeleteDialog", () => {
         resolveDelete = resolve;
       })
     );
+    const mockSetDeletingEmployee = vi.fn();
 
     mockUseEmployeeStore.mockReturnValue({
       ...defaultMockStore,
       deleteEmployee: mockDeleteEmployee,
+      setDeletingEmployee: mockSetDeletingEmployee,
     });
 
-    render(<EmployeeDeleteDialog employee={mockEmployee} onCancel={mockOnCancel} />);
+    render(<EmployeeDeleteDialog />);
 
     const deleteButton = screen.getByText("削除");
     fireEvent.click(deleteButton);
@@ -103,7 +114,7 @@ describe("EmployeeDeleteDialog", () => {
     // 削除処理を完了
     resolveDelete!();
     await waitFor(() => {
-      expect(mockOnCancel).toHaveBeenCalledTimes(1);
+      expect(mockSetDeletingEmployee).toHaveBeenCalledWith(null);
     });
   });
 
@@ -116,7 +127,7 @@ describe("EmployeeDeleteDialog", () => {
       deleteEmployee: mockDeleteEmployee,
     });
 
-    render(<EmployeeDeleteDialog employee={mockEmployee} onCancel={mockOnCancel} />);
+    render(<EmployeeDeleteDialog />);
 
     const deleteButton = screen.getByText("削除");
     fireEvent.click(deleteButton);
@@ -125,9 +136,19 @@ describe("EmployeeDeleteDialog", () => {
       expect(consoleSpy).toHaveBeenCalledWith("削除エラー:", expect.any(Error));
     });
 
-    // エラー時はダイアログが閉じない
-    expect(mockOnCancel).not.toHaveBeenCalled();
+    // エラー時はダイアログが閉じない（setDeletingEmployeeが呼ばれない）
+    expect(defaultMockStore.setDeletingEmployee).not.toHaveBeenCalled();
 
     consoleSpy.mockRestore();
+  });
+
+  it("deletingEmployeeがnullの場合は何も表示されない", () => {
+    mockUseEmployeeStore.mockReturnValue({
+      ...defaultMockStore,
+      deletingEmployee: null,
+    });
+
+    const { container } = render(<EmployeeDeleteDialog />);
+    expect(container.firstChild).toBeNull();
   });
 });

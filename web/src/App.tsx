@@ -3,9 +3,11 @@ import { EmployeeCreateForm } from "./components/EmployeeCreateForm";
 import { useEmployeeStore } from "./stores/employeeStore";
 import { EmployeeList } from "./components/EmployeeList";
 import { EmployeeEditForm } from "./components/EmployeeEditForm";
+import { EmployeeDeleteDialog } from "./components/EmployeeDeleteDialog";
 
 function App() {
-  const { loading, error, showForm, setShowForm, fetchEmployees, editingEmployee } = useEmployeeStore();
+  const { loading, error, showForm, setShowForm, fetchEmployees, editingEmployee, deletingEmployee } =
+    useEmployeeStore();
 
   useEffect(() => {
     fetchEmployees();
@@ -65,6 +67,7 @@ function App() {
       </header>
       {showForm && <EmployeeCreateForm />}
       {editingEmployee && <EmployeeEditForm />}
+      {deletingEmployee && <EmployeeDeleteDialog />}
 
       {/* メインコンテンツ */}
       <main className="relative max-w-7xl mx-auto px-6 py-10">

@@ -16,8 +16,22 @@ describe("EmployeeCreateForm", () => {
     const mockSetShowForm = vi.fn();
 
     vi.mocked(useEmployeeStore).mockReturnValue({
-      createEmployee: mockCreateEmployee,
+      employees: [],
+      loading: false,
+      error: null,
+      showForm: true,
+      editingEmployee: null,
+      deletingEmployee: null,
+      setEmployees: vi.fn(),
+      setLoading: vi.fn(),
+      setError: vi.fn(),
       setShowForm: mockSetShowForm,
+      setEditingEmployee: vi.fn(),
+      setDeletingEmployee: vi.fn(),
+      fetchEmployees: vi.fn(),
+      createEmployee: mockCreateEmployee,
+      updateEmployee: vi.fn(),
+      deleteEmployee: vi.fn(),
     });
 
     render(<EmployeeCreateForm />);
@@ -37,8 +51,22 @@ describe("EmployeeCreateForm", () => {
     const mockSetShowForm = vi.fn();
 
     vi.mocked(useEmployeeStore).mockReturnValue({
-      createEmployee: mockCreateEmployee,
+      employees: [],
+      loading: false,
+      error: null,
+      showForm: true,
+      editingEmployee: null,
+      deletingEmployee: null, // 追加
+      setEmployees: vi.fn(),
+      setLoading: vi.fn(),
+      setError: vi.fn(),
       setShowForm: mockSetShowForm,
+      setEditingEmployee: vi.fn(),
+      setDeletingEmployee: vi.fn(), // 追加
+      fetchEmployees: vi.fn(),
+      createEmployee: mockCreateEmployee,
+      updateEmployee: vi.fn(),
+      deleteEmployee: vi.fn(),
     });
 
     render(<EmployeeCreateForm />);

@@ -1,24 +1,18 @@
 import React from "react";
 import { useEmployeeStore } from "../stores/employeeStore";
 
-interface EmployeeDeleteDialogProps {
-  employee: {
-    id: number;
-    name: string;
-    email: string;
-    department?: string;
-  };
-  onCancel: () => void;
-}
-
-export const EmployeeDeleteDialog: React.FC<EmployeeDeleteDialogProps> = ({ employee, onCancel }) => {
-  const { deleteEmployee } = useEmployeeStore();
+export const EmployeeDeleteDialog: React.FC = () => {
+  const { deleteEmployee, deletingEmployee, setDeletingEmployee } = useEmployeeStore();
   const [isDeleting, setIsDeleting] = React.useState(false);
+
+  const onCancel = () => setDeletingEmployee(null);
+
+  if (!deletingEmployee) return null;
 
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      await deleteEmployee(employee.id);
+      await deleteEmployee(deletingEmployee.id);
       onCancel(); // ダイアログを閉じる
     } catch (error) {
       console.error("削除エラー:", error);
@@ -53,11 +47,13 @@ export const EmployeeDeleteDialog: React.FC<EmployeeDeleteDialogProps> = ({ empl
             <div className="liquid-glass rounded-2xl p-4 mb-6">
               <div className="text-center">
                 <div className="w-12 h-12 bg-gradient-to-br from-slate-400/80 to-slate-600/80 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <span className="text-white font-bold text-lg">{employee.name.charAt(0)}</span>
+                  <span className="text-white font-bold text-lg">{deletingEmployee.name.charAt(0)}</span>
                 </div>
-                <h3 className="font-semibold text-slate-800/90">{employee.name}</h3>
-                <p className="text-sm text-slate-600/70">{employee.email}</p>
-                {employee.department && <p className="text-sm text-slate-600/70">{employee.department}</p>}
+                <h3 className="font-semibold text-slate-800/90">{deletingEmployee.name}</h3>
+                <p className="text-sm text-slate-600/70">{deletingEmployee.email}</p>
+                {deletingEmployee.department && (
+                  <p className="text-sm text-slate-600/70">{deletingEmployee.department}</p>
+                )}
               </div>
             </div>
 
