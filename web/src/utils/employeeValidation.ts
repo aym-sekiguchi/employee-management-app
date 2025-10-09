@@ -42,11 +42,11 @@ export const validateCreateEmployeeForm = (formData: CreateEmployeeFormData): Va
 export const validateUpdateEmployeeForm = (formData: UpdateEmployeeFormData): ValidationErrors => {
   const errors: ValidationErrors = {};
 
-  if (formData.name && formData.name.trim() && formData.name.length > 100) {
+  if (formData.name && formData.name.length > 100) {
     errors.name = "名前は100文字以内で入力してください";
   }
 
-  if (formData.email && formData.email.trim()) {
+  if (formData.email) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       errors.email = "有効なメールアドレスを入力してください";
     } else if (formData.email.length > 255) {
