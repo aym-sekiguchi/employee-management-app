@@ -59,16 +59,6 @@ export const EmployeeList: React.FC = () => {
             className="liquid-glass rounded-2xl p-6 cursor-pointer hover:scale-105 transition-transform"
             onClick={() => handleEmployeeClick(employee)}
           >
-            {/* <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
-                <span className="text-lg font-bold text-slate-700/80">{employee.name.charAt(0)}</span>
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-semibold text-slate-800/90 truncate">{employee.name}</h3>
-                <p className="text-sm text-slate-600/70 truncate">{employee.email}</p>
-                <p className="text-sm text-slate-500/60">{employee.department || "未設定"}</p>
-              </div>
-            </div> */}
             <div className="flex space-x-4 mb-6">
               {/* アバター */}
               <div className="w-14 h-14 bg-gradient-to-br from-blue-400/80 to-purple-500/80 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg">
@@ -95,10 +85,6 @@ export const EmployeeList: React.FC = () => {
           onDelete={handleDelete}
         />
       )}
-      {/* 削除確認ダイアログ */}
-      {/* {selectedEmployee && (
-        <EmployeeDeleteDialog employee={selectedEmployee} onCancel={() => setSelectedEmployee(null)} />
-      )} */}
     </>
   );
 };
