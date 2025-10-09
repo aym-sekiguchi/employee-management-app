@@ -113,7 +113,7 @@ export const useUpdateEmployeeForm = ({ employeeId, initialData, onSubmit }: Use
       await onSubmit(employeeId, {
         name: formData.name?.trim(),
         email: formData.email?.trim(),
-        department: formData.department?.trim() || "",
+        department: formData.department?.trim() || undefined,
       });
     } catch (error) {
       if (error instanceof Error && error.message.includes("使用されています")) {
