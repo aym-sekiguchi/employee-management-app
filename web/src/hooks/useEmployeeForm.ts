@@ -54,7 +54,7 @@ export const useCreateEmployeeForm = ({ initialData, onSubmit }: UseCreateEmploy
       await onSubmit({
         name: formData.name.trim(),
         email: formData.email.trim(),
-        department: formData.department.trim() || "",
+        department: formData.department?.trim() || "",
       });
 
       // 成功時フォームクリア（新規作成の場合のみ）
@@ -113,7 +113,7 @@ export const useUpdateEmployeeForm = ({ employeeId, initialData, onSubmit }: Use
       await onSubmit(employeeId, {
         name: formData.name?.trim(),
         email: formData.email?.trim(),
-        department: formData.department?.trim() || undefined,
+        department: formData.department?.trim() || "",
       });
     } catch (error) {
       if (error instanceof Error && error.message.includes("使用されています")) {

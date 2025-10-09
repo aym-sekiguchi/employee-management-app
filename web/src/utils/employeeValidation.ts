@@ -1,7 +1,7 @@
 export interface CreateEmployeeFormData {
   name: string;
   email: string;
-  department: string;
+  department?: string;
 }
 export interface UpdateEmployeeFormData {
   name?: string;
